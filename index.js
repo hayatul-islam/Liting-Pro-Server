@@ -24,7 +24,13 @@ async function run() {
         const listingCollection = database.collection("listing");
         const subCategoryCollection = database.collection("subCategory");
 
-        // brands
+        // post brand
+        app.post('/addBrand', async (req, res) => {
+            const result = await brandCollection.insertOne(req.body);
+            res.json(result);
+        });
+
+        // get brands
         app.get('/brands', async (req, res) => {
             const brands = await brandCollection.find({}).toArray();
             res.send(brands);
