@@ -58,7 +58,7 @@ async function run() {
         app.get('/subCategory', async (req, res) => {
             const result = await subCategoryCollection.find({}).toArray();
             res.send(result);
-        });
+        })
 
     }
     finally {
