@@ -20,20 +20,19 @@ async function run() {
     try {
         await client.connect();
         const database = client.db("listingPro");
-        const brandCollection = database.collection("brands");
         const listingCollection = database.collection("listing");
-        const subCategoryCollection = database.collection("subCategory");
+        const categoryCollection = database.collection("category");
 
-        // post brand
-        app.post('/addBrand', async (req, res) => {
-            const result = await brandCollection.insertOne(req.body);
+        // post category
+        app.post('/addCategory', async (req, res) => {
+            const result = await categoryCollection.insertOne(req.body);
             res.json(result);
         });
 
-        // get brands
-        app.get('/brands', async (req, res) => {
-            const brands = await brandCollection.find({}).toArray();
-            res.send(brands);
+        // get category
+        app.get('/category', async (req, res) => {
+            const result = await categoryCollection.find({}).toArray();
+            res.send(result);
         });
 
         // get listing
@@ -48,17 +47,7 @@ async function run() {
             res.json(addListing);
         });
 
-        // post category
-        app.post('/addSubCategory', async (req, res) => {
-            const result = await subCategoryCollection.insertOne(req.body);
-            res.json(result);
-        });
 
-        // get subCategory
-        app.get('/subCategory', async (req, res) => {
-            const result = await subCategoryCollection.find({}).toArray();
-            res.send(result);
-        })
 
     }
     finally {
