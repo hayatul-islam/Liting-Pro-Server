@@ -4,8 +4,9 @@ require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
 
-app.use(express.json({ limit: '25mb' }));
-app.use(express.urlencoded({ limit: '25mb', extended: true }));
+// image upload
+// app.use(express.json({ limit: '25mb' }));
+// app.use(express.urlencoded({ limit: '25mb', extended: true }));
 
 const app = express();
 const port = process.env.PORT || 4040;
