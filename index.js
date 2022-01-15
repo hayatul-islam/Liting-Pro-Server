@@ -3,17 +3,14 @@ const cors = require('cors');
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
-const bodyParser = require('body-parser');
+const fileUpload = require("express-fileupload");
 
 const app = express();
 const port = process.env.PORT || 4040;
 
 app.use(cors());
 app.use(express.json());
-
-// image upload
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(fileUpload());
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.r9gms.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -46,8 +43,52 @@ async function run() {
 
         //  post addListing 
         app.post('/addListing', async (req, res) => {
-            const addListing = await listingCollection.insertOne(req.body);
-            res.json(addListing);
+
+            // console.log(req.body);
+            // console.log(req.files);
+
+            const title = req.body.title;
+            const investment = req.body.investment;
+            const minCash = req.body.minCash;
+            const totalCash = req.body.totalCash;
+            const description = req.body.description;
+            const category = req.body.category;
+            const location = req.body.location;
+            const ListingImage = req.files.image;
+            const banner1 = req.files.banner1;
+            const banner2 = req.files.banner2;
+            const banner3 = req.files.banner3;
+
+            const picImg = ListingImage.data;
+            const picData1 = banner1.data;
+            const picData2 = banner2.data;
+            const picData3 = banner3.data;
+            const mainImg = picImg.toString("base64");
+            const encodedPic1 = picData1.toString("base64");
+            const encodedPic2 = picData2.toString("base64");
+            const encodedPic3 = picData3.toString("base64");
+            const image = Buffer.from(mainImg, "base64");
+            const bannerImg1 = Buffer.from(encodedPic1, "base64");
+            const bannerImg2 = Buffer.from(encodedPic2, "base64");
+            const bannerImg3 = Buffer.from(encodedPic3, "base64");
+
+            const listing = {
+                title,
+                investment,
+                totalCash,
+                minCash,
+                description,
+                category,
+                location,
+                image,
+                bannerImg1,
+                bannerImg2,
+                bannerImg3,
+            };
+            console.log(listing);
+
+            const result = await listingCollection.insertOne(listing);
+            res.send(result);
         });
 
 
